@@ -168,3 +168,162 @@ def determine_the_most_frequent():
 
 
 # determine_the_most_frequent()
+
+
+def sort_dictionaries_by_common_key():
+    rows = [
+        {'fname': 'Brian', 'lname': 'Jones', 'uid': 1003},
+        {'fname': 'David', 'lname': 'Beazley', 'uid': 1002},
+        {'fname': 'John', 'lname': 'Cleese', 'uid': 1001},
+        {'fname': 'Big', 'lname': 'Jones', 'uid': 1004}
+    ]
+    """
+    use itemgetter to sort
+    """
+    from operator import itemgetter
+    rows_by_fname = sorted(rows, key=itemgetter("fname"))
+    # rows_by_fname = sorted(rows, key=lambda x: x["fname"])
+    rows_by_uid = sorted(rows, key=itemgetter("uid"))
+    print(rows_by_fname)
+    print(rows_by_uid)
+    """
+    itemgetter() can accept multiple keys
+    can be replaced by lambda but itemgetter() is a bit faster
+    """
+    rows_by_lfname = sorted(rows, key=itemgetter('lname', 'fname'))
+    # rows_by_lfname = sorted(rows, key=lambda x: (x["lname"], x["fname"]))
+    print(rows_by_lfname)
+
+
+# sort_dictionaries_by_common_key()
+
+
+def attrgetter_():
+    """
+    use attrgetter to sort self-defined object
+    """
+    from operator import attrgetter
+    class User:
+        def __init__(self, user_id):
+            self.user_id = user_id
+
+    users = [User(3), User(2), User(23)]
+    sorted(users, key=attrgetter("user_id"))
+    # sorted(users, key=lambda u: u.user_id)
+
+
+def group_record_together_based_on_a_field():
+    """
+    itertools.groupby() to group data together(based on the key given)
+    sort first
+    """
+    rows = [
+        {'address': '5412 N CLARK', 'date': '07/01/2012'},
+        {'address': '5148 N CLARK', 'date': '07/04/2012'},
+        {'address': '5800 E 58TH', 'date': '07/02/2012'},
+        {'address': '2122 N CLARK', 'date': '07/03/2012'},
+        {'address': '5645 N RAVENSWOOD', 'date': '07/02/2012'},
+        {'address': '1060 W ADDISON', 'date': '07/02/2012'},
+        {'address': '4801 N BROADWAY', 'date': '07/01/2012'},
+        {'address': '1039 W GRANVILLE', 'date': '07/04/2012'},
+    ]
+    from operator import itemgetter
+    from itertools import groupby
+    rows.sort(key=itemgetter("date"))
+    for date, items in groupby(rows, key=itemgetter("date")):
+        print(date)
+        for i in items:
+            print("   ", i)
+    """
+    07/01/2012
+        {'address': '5412 N CLARK', 'date': '07/01/2012'}
+        {'address': '4801 N BROADWAY', 'date': '07/01/2012'}
+    07/02/2012
+        {'address': '5800 E 58TH', 'date': '07/02/2012'}
+        {'address': '5645 N RAVENSWOOD', 'date': '07/02/2012'}
+        {'address': '1060 W ADDISON', 'date': '07/02/2012'}
+    07/03/2012
+        {'address': '2122 N CLARK', 'date': '07/03/2012'}
+    07/04/2012
+        {'address': '5148 N CLARK', 'date': '07/04/2012'}
+        {'address': '1039 W GRANVILLE', 'date': '07/04/2012'}
+    """
+
+
+# group_record_together_based_on_a_field()
+
+
+def filter_compress():
+    values = ['1', '2', '-3', '-', '4', 'N/A', '5']
+
+    def is_int(val):
+        try:
+            x = int(val)
+            return True
+        except ValueError:
+            return False
+    ivals = list(filter(is_int, values))
+    print(ivals)
+    # Outputs ['1', '2', '-3', '4', '5']
+
+    """
+    compress takes an iterable and an accompanying Boolean selector sequence as input. 
+    As output, it gives you all of the items in the iterable where the corresponding element in the selector is True
+    """
+    addresses = [
+        '5412 N CLARK',
+        '5148 N CLARK',
+        '5800 E 58TH',
+        '2122 N CLARK'
+        '5645 N RAVENSWOOD',
+        '1060 W ADDISON',
+        '4801 N BROADWAY',
+        '1039 W GRANVILLE',
+    ]
+    counts = [0, 3, 10, 4, 1, 7, 6, 1]
+    # use compress to make a list of items that count > 5
+    from itertools import compress
+    more5 = [n > 5 for n in counts]
+    print(more5)
+    # [False, False, True, False, False, True, True, False]
+    print(list(compress(addresses, more5)))
+    # ['5800 E 58TH', '4801 N BROADWAY', '1039 W GRANVILLE']
+
+
+# filter_compress()
+
+
+def namedtuple_():
+    """
+    collections.namedtuple() is like struct in c
+    """
+    from collections import namedtuple
+    User = namedtuple("User", ["name", "age"])
+    user = User("robin", "21")
+    print(user)
+    print(user.name)
+    print(user.age)
+    """
+    User(name='robin', age='21')
+    robin
+    21
+    """
+    """
+    namedtuple is immutable, use _replace()
+    """
+    user._replace(age=22)
+    print(user)
+
+
+# namedtuple_()
+
+
+def chainmap():
+    from collections import ChainMap
+    a = {'x': 1, 'z': 3}
+    b = {'y': 2, 'z': 4}
+    c = ChainMap(a, b)
+    print(c["z"])   # 3, duplicate keys, values from the first mapping
+
+
+# chainmap()
