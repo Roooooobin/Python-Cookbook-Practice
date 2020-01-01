@@ -126,3 +126,86 @@ def greedy_nongreedy_match():
 
 
 # greedy_nongreedy_match()
+
+
+def re_dotall():
+    """
+    re.DOTALL to match all characters including newlines
+    """
+    text = """/* this is a
+                 multiline comment */
+    """
+    comment_pat = re.compile(r'/\*(.*?)\*/', re.DOTALL)
+    print(comment_pat.findall(text))    # [' this is a\n                 multiline comment ']
+
+
+# re_dotall()
+
+
+def stripping():
+    """
+    .strip()    .lstrip()    .rstrip() to strip whitespaces
+    """
+    s = '    hello world \n'
+    s1 = s.strip()
+    print(s1)    # 'hello world'
+    s2 = s.lstrip()
+    print(s2)   # 'hello world \n'
+    s3 = s.rstrip()
+    print(s3)   # '     hello world'
+    s = '---Robin+++'
+    print(s.lstrip('-'))    # 'Robin+++'
+    print(s.rstrip('+'))    # '---Robin'
+
+
+# stripping()
+
+
+def sanitize_cleanup():
+    """
+    str.translate()
+    """
+    s = 'python\fis\tawesome\r\n'
+    remap = {
+        ord('\t'): ' ',
+        ord('\f'): ' ',
+        ord('\r'): None
+    }
+    print(s.translate(remap))   # 'python is awesome\n'
+
+
+# sanitize_cleanup()
+
+
+def align_text():
+    text = "hello world"
+    print(text.ljust(20))
+    print(text.rjust(20, '*'))
+    print(text.center(20))
+    print(format(text, '>20'))
+    print(format(text, '^20'))
+    print(format(text, '0^20'))
+    """
+hello world         
+*********hello world
+    hello world     
+         hello world
+    hello world     
+0000hello world00000
+    """
+
+
+# align_text()
+
+
+def reformat_text():
+    s = "Look into my eyes, look into my eyes, the eyes, the eyes, \
+    the eyes, not around the eyes, don't look around the eyes, \
+    look into my eyes, you're under."
+    import textwrap
+    print(textwrap.fill(s, 60))
+    print(textwrap.fill(s, 40, initial_indent='   '))
+    print(textwrap.fill(s, 40, subsequent_indent='   '))
+
+
+reformat_text()
