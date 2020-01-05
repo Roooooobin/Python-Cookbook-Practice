@@ -52,4 +52,18 @@ def generate_permutations():
     """
 
 
-generate_permutations()
+# generate_permutations()
+
+def chain_iteration():
+    """
+    use chain() to iterate on items in separate containers, chain(a, b) more elegant and efficient than a+b
+    """
+    from itertools import chain
+
+    a = [1, 2, 3, 4]
+    b = ['a', 'b', 'c']
+    for x in chain(a, b):
+        print(x)
+
+
+# chain_iteration()
