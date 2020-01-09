@@ -105,3 +105,34 @@ def anonymous_function_capture_value():
 
 
 # anonymous_function_capture_value()
+
+
+def reduce_arguments():
+    def spam(a, b, c, d):
+        print(a, b, c, d)
+
+    from functools import partial
+
+    s1 = partial(spam, 1)   # a = 1
+    s1(2, 3, 4)     # 1 2 3 4
+    s2 = partial(spam, 1, 2, d=4)   # a = 1, b = 2, d = 4
+    s2(3)   # 1 2 3 4
+    """
+    initially there are no default values, but now you want to set default values according to certain circumstances
+    ex. calculate all distances between one specific cord and others
+    """
+    points = [(1, 2), (3, 4), (5, 6), (7, 8)]
+
+    import math
+
+    def distance(p1, p2):
+        x1, y1 = p1
+        x2, y2 = p2
+        return math.hypot(x2 - x1, y2 - y1)
+
+    pt = (4, 3)
+    points.sort(key=partial(distance, pt))
+    print(points)   # [(3, 4), (1, 2), (5, 6), (7, 8)]
+
+
+reduce_arguments()
