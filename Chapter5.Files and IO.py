@@ -143,3 +143,63 @@ def directory_listing():
 
 
 # directory_listing()
+
+
+def wrapping_existing_file_descriptor_as_file_object():
+    """
+    a file descriptor is different than a normal open file in that it is simply an integer handle assigned by the os
+    """
+    import os
+
+    fd = os.open("somefile.txt", os.O_WRONLY | os.O_CREAT)
+
+    f = open(fd, "wt")
+    f.write("hello world\n")
+    f.close()
+
+
+def temporary_file():
+    from tempfile import TemporaryFile, NamedTemporaryFile
+
+    with TemporaryFile("w+t") as f:
+        f.write()
+        f.write()
+        f.seek(0)
+        data = f.read()
+
+    # name of the temporary file
+    with NamedTemporaryFile("w+t") as f:
+        print(f.name)
+
+    # auto delete closed
+    with NamedTemporaryFile("w+t", delete=False) as f:
+        pass
+
+    # temporary directory
+    from tempfile import TemporaryDirectory
+    with TemporaryDirectory() as dirname:
+        print(dirname)
+
+
+def serialize_python_object():
+    import pickle
+
+    data = {"a": 1, "b": 2}     # any python object
+    f = open("somefile", "wb")
+    pickle.dump(data, f)
+    f = open("somefile", "rb")
+    data = pickle.load(f)
+    # dump an object to string
+    s = pickle.dumps(data)
+    print(s)
+    data = pickle.loads(s)
+    print(data)
+    # also able to work with restoring multiple objects
+    # pickle functions, classes and instances but the resulting data only encodes name references to the code objects
+    import math
+    s = pickle.dumps(math.cos)
+    cos_ = pickle.loads(s)
+    print(cos_(2))
+
+
+# serialize_python_object()
